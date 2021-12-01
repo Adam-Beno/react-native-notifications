@@ -1,5 +1,9 @@
 package com.wix.reactnativenotifications.core.notification;
 
+import static com.wix.reactnativenotifications.Defs.NOTIFICATION_OPENED_EVENT_NAME;
+import static com.wix.reactnativenotifications.Defs.NOTIFICATION_RECEIVED_BACKGROUND_EVENT_NAME;
+import static com.wix.reactnativenotifications.Defs.NOTIFICATION_RECEIVED_EVENT_NAME;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,11 +21,6 @@ import com.wix.reactnativenotifications.core.AppLifecycleFacadeHolder;
 import com.wix.reactnativenotifications.core.InitialNotificationHolder;
 import com.wix.reactnativenotifications.core.JsIOHelper;
 import com.wix.reactnativenotifications.core.NotificationIntentAdapter;
-import com.wix.reactnativenotifications.core.ProxyService;
-
-import static com.wix.reactnativenotifications.Defs.NOTIFICATION_OPENED_EVENT_NAME;
-import static com.wix.reactnativenotifications.Defs.NOTIFICATION_RECEIVED_EVENT_NAME;
-import static com.wix.reactnativenotifications.Defs.NOTIFICATION_RECEIVED_BACKGROUND_EVENT_NAME;
 
 public class PushNotification implements IPushNotification {
 
@@ -138,8 +137,8 @@ public class PushNotification implements IPushNotification {
     }
 
     protected PendingIntent getCTAPendingIntent() {
-        final Intent cta = new Intent(mContext, ProxyService.class);
-        return NotificationIntentAdapter.createPendingNotificationIntent(mContext, cta, mNotificationProps);
+        final Intent cta = mAppLaunchHelper.getLaunchIntent(mContext);
+        return NotificationIntentAdapter.createActivity(mContext, cta, mNotificationProps);
     }
 
     protected Notification buildNotification(PendingIntent intent) {
